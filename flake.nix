@@ -10,6 +10,8 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    foundry.url =
+      "github:shazow/foundry.nix/monthly"; # Use monthly branch for permanent releases
     zombienet = {
       url = "github:paritytech/zombienet";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,6 +24,7 @@
       nixpkgs,
       systems,
       fenix,
+      foundry,
       zombienet,
       ...
     }:
@@ -32,6 +35,7 @@
           inherit system;
           overlays = [
             fenix.overlays.default
+            foundry.overlay
             zombienet.overlays.default
           ];
         };

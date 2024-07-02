@@ -19,6 +19,7 @@ in
 with pkgs;
 mkShell.override { stdenv = clangStdenv; } {
   packages = [
+    foundry-bin
     openssl
     pkg-config
     rust-toolchain
