@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
   version = "2412-4";
 
   src = fetchFromGitHub {
-    owner = "paritytech";
+    owner = "Lederstrumpf";
     repo = "polkadot-sdk";
-    rev = "polkadot-stable${version}";
+    rev = "force-portable-blake2_simd-${version}";
     hash = "sha256-MYv/3bpERjceBzQxR+NkbaRJZegzkJY0fN6TaF2xn8I=";
 
     # the build process of polkadot requires a .git folder in order to determine
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pvB507k3eYfz8tpTaVUzJOIKvtWEckaMu3Eux89V0uE=";
+  cargoHash = "sha256-AhJKrxrBtWCGPbB80Gg2AC8QJbrbUdU7JJCl6Ootgh4=";
 
   buildType = "production";
   buildAndTestSubdir = target;
