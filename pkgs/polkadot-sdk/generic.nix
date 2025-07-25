@@ -24,13 +24,13 @@ in
 rustPlatform.buildRustPackage rec {
   inherit pname;
 
-  version = "2503-7";
+  version = "2506";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
     repo = "polkadot-sdk";
     rev = "force-portable-blake2_simd-${version}";
-    hash = "sha256-QDewNG38fIUuJpZjBjtnUtHpbnxKDGjGtH0WfXPyrxM==";
+    hash = "sha256-BuAUMAjyjva5CW6jdhvSUHhrTst6tW8I8TyF2Uq8wyY=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mtVapYDd3sko/xhXSSvZnqEM5Ru+h6M9hq2W3WnYX8c=";
+  cargoHash = "sha256-yEe5QqoMFkJQT2zv0gQ4HOjAiDWj9rjQLxiV25XOoUg=";
 
   buildType = "production";
   buildAndTestSubdir = target;
@@ -70,13 +70,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
   # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
   # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
