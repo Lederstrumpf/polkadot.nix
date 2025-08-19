@@ -24,13 +24,13 @@ in
 rustPlatform.buildRustPackage rec {
   inherit pname;
 
-  version = "2506";
+  version = "2506-1";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
     repo = "polkadot-sdk";
     rev = "force-portable-blake2_simd-${version}";
-    hash = "sha256-BuAUMAjyjva5CW6jdhvSUHhrTst6tW8I8TyF2Uq8wyY=";
+    hash = "sha256-MDN7bRkgkZVxs3AFf5x5N1pvKKLKhjy1z2RVQEmarfc=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-yEe5QqoMFkJQT2zv0gQ4HOjAiDWj9rjQLxiV25XOoUg=";
+  cargoHash = "sha256-tbVUEngMnp+ENmN4e1rqmvrJ62S50C5hmd7YD9OWuaQ=";
 
   buildType = "production";
   buildAndTestSubdir = target;
