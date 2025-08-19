@@ -4,6 +4,7 @@
   description,
   license,
 
+  cacert,
   fetchFromGitHub,
   lib,
   openssl,
@@ -14,8 +15,6 @@
   rustPlatform,
   rustc,
   stdenv,
-  Security,
-  SystemConfiguration,
 }:
 
 let
@@ -51,16 +50,10 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-tbVUEngMnp+ENmN4e1rqmvrJ62S50C5hmd7YD9OWuaQ=";
 
   buildType = "production";
   buildAndTestSubdir = target;
-
-  # NOTE: tests currently fail to compile due to an issue with cargo-auditable
-  # and resolution of features flags, potentially related to this:
-  # https://github.com/rust-secure-code/cargo-auditable/issues/66
-  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -73,17 +66,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 
-  # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
-  # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
-  # this should no longer be needed after: https://github.com/paritytech/polkadot-sdk/pull/7008
-  # since the new wasmv1-none target won't require rebuilding std.
-  SKIP_WASM_BUILD = 1;
+  checkInputs = [
+    cacert
+  ];
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";

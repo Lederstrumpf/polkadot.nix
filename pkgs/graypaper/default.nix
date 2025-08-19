@@ -5,21 +5,23 @@
 }:
 
 let
-  version = "0.6.4";
+  version = "0.7.1";
+  pname = "graypaper";
 in
-runCommand "graypaper"
+runCommand "${pname}-${version}"
   {
-    inherit version;
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "gavofyork";
       repo = "graypaper";
       rev = "v${version}";
-      hash = "sha256-PgPRNwjlMMidJPT7qvF6C/s23GFDn93Noc8DOL0kaXQ=";
+      hash = "sha256-6ESFgOl5A8uObYD2xYld4hM59taoh573O/xrWEcL4Cs=";
     };
     nativeBuildInputs = [
       (texliveBasic.withPackages (
         ps: with ps; [
+          accents
           biber
           biblatex
           booktabs
