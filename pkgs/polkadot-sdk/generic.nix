@@ -10,20 +10,17 @@
   openssl,
   pkg-config,
   protobuf,
-  rocksdb_8_3,
-  rust-jemalloc-sys-unprefixed,
+  rocksdb,
+  rust-jemalloc-sys,
   rustPlatform,
   rustc,
   stdenv,
 }:
 
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage rec {
   inherit pname;
 
-  version = "2509-3";
+  version = "2512";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
@@ -50,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  cargoHash = "sha256-kaPwZMIDOG/syDRiEfaZFOIAg4er3bk0KJoT6klqsTA=";
+  cargoHash = "sha256-bIEonV4+si6mX8ImtbVIGppUUgGvQml50x05XVYz6l0=";
 
   buildType = "production";
   buildAndTestSubdir = target;
@@ -62,15 +59,21 @@ rustPlatform.buildRustPackage rec {
     rustc.llvmPackages.lld
   ];
 
-  # NOTE: jemalloc is used by default on Linux with unprefixed enabled
+  # NOTE: jemalloc is used by default on Linux
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys ];
 
   checkInputs = [
     cacert
   ];
+
+  # NOTE: check whether this is still needed in the next release
+  env = {
+    RUSTFLAGS = "-A useless_deprecated";
+    WASM_BUILD_RUSTFLAGS = "-A useless_deprecated";
+  };
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "psvm";
-  version = "0-unstable-2024-09-06";
+  version = "0-unstable-2025-12-10";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "psvm";
-    rev = "febe87df7e01ffb842853e1777b6519b933d0565";
-    hash = "sha256-QKIr+2fqaysj+7EL/OBWhLCeD8HxgzpKaRAXfczEtM4=";
+    rev = "025d82108d2f9e4758459ab91557d7e7c945be70";
+    hash = "sha256-NrArS6GjxhI+didtloEQiKc6TIRbRMhPPpRVLxw+fHk=";
   };
 
-  cargoHash = "sha256-fG9h//7YuRigbvNmI5+dxDvk//sz1peN9ppHcj9lMGc=";
+  cargoHash = "sha256-FK/ynjaWmBhlQ9tnfECDzUwZWhZR6gS9GKyyCRIJjnU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
