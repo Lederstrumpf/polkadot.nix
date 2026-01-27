@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     ./fix-cargo-toml.patch
   ];
 
-  cargoHash = "sha256-cNwoO3CE/1gL3bcT4//C2YzLub3CP/mQCkMB7nykvKM=";
+  cargoHash = "sha256-CT61ca7SrwFxXFJWJ3ylD8EiZ5fiG+99aae6nc5wTJA=";
 
   buildType = "production";
   buildAndTestSubdir = target;
