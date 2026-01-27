@@ -47,6 +47,11 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
+  cargoPatches = [
+    # make picosimd compile on nix (https://github.com/koute/picosimd/pull/3)
+    ./fix-cargo-toml.patch
+  ];
+
   cargoHash = "sha256-cNwoO3CE/1gL3bcT4//C2YzLub3CP/mQCkMB7nykvKM=";
 
   buildType = "production";
@@ -68,12 +73,6 @@ rustPlatform.buildRustPackage rec {
   checkInputs = [
     cacert
   ];
-
-  # NOTE: check whether this is still needed in the next release
-  env = {
-    RUSTFLAGS = "-A useless_deprecated";
-    WASM_BUILD_RUSTFLAGS = "-A useless_deprecated";
-  };
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
