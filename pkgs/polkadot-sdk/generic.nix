@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Lederstrumpf";
     repo = "polkadot-sdk";
     rev = "force-portable-blake2_simd-${version}";
-    hash = "sha256-BrTcaCAiFH7tpjz/hBtnrn3+GUjF2WWyD8xgnWYL9pk=";
+    hash = "sha256-IkYFIaEAzsRWlb2Gdwh9uqgbKR9BG57H3xaFD/LRbEM=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     ./picosimd-0.9.3.patch
   ];
 
-  cargoHash = "sha256-bBff0nm0l/1pJ09eqiYJAJawEnrbXQuVHU4DMTYjtwc=";
+  cargoHash = "sha256-CJDdqUJCYnYXQuV0XsNXE3H28xl/TsoT9uQN+YsDmuI=";
 
   buildType = "production";
   buildAndTestSubdir = target;
