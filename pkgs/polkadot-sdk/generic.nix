@@ -11,7 +11,7 @@
   pkg-config,
   protobuf,
   rocksdb,
-  rust-jemalloc-sys,
+  rust-jemalloc-sys-unprefixed,
   rustPlatform,
   rustc,
   stdenv,
@@ -20,7 +20,7 @@
 rustPlatform.buildRustPackage rec {
   inherit pname;
 
-  version = "2512-1";
+  version = "2512-2";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [
     # make picosimd compile on nix (https://github.com/koute/picosimd/pull/3)
-    ./fix-cargo-toml.patch
+    ./picosimd-0.9.3.patch
   ];
 
-  cargoHash = "sha256-CT61ca7SrwFxXFJWJ3ylD8EiZ5fiG+99aae6nc5wTJA=";
+  cargoHash = "sha256-bBff0nm0l/1pJ09eqiYJAJawEnrbXQuVHU4DMTYjtwc=";
 
   buildType = "production";
   buildAndTestSubdir = target;
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 
   checkInputs = [
     cacert
