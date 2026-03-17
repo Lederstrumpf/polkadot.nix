@@ -3,6 +3,7 @@
   target,
   description,
   license,
+  features ? [],
 
   cacert,
   fetchFromGitHub,
@@ -56,6 +57,9 @@ rustPlatform.buildRustPackage rec {
 
   buildType = "production";
   buildAndTestSubdir = target;
+  cargoBuildFlags = lib.optionals (features != []) [
+    "--features=${lib.concatStringsSep "," features}"
+  ];
 
   nativeBuildInputs = [
     pkg-config
