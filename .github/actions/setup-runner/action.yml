@@ -24,11 +24,11 @@ runs:
         echo "zswap (after)"
         grep -r . /sys/module/zswap/parameters/
     - name: Free disk space
-      uses: wimpysworld/nothing-but-nix@10c936d9e46521bf923f75458e0cbd4fa309300d
+      uses: wimpysworld/nothing-but-nix@v10
     - name: Install nix
       uses: cachix/install-nix-action@v31
     - name: Setup cachix
-      uses: cachix/cachix-action@v16
+      uses: cachix/cachix-action@v17
       with:
         authToken: "${{ inputs.cachix_token }}"
         name: polkadot
