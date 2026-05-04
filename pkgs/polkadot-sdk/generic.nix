@@ -20,13 +20,13 @@
 rustPlatform.buildRustPackage rec {
   inherit pname;
 
-  version = "2603";
+  version = "2603-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${version}";
-    hash = "sha256-vm8WUeIkgulCq9nwqQZsA5VHVv3vMEo66UNdHEhtmHY=";
+    hash = "sha256-4yIv0yRZTR6kxZtH08OdAvj/Wd/FXv0YpiHQduYGeqo=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     ./picosimd-0.9.3.patch
   ];
 
-  cargoHash = "sha256-Da18rlsU8s045AzI3dZ6EhYm+CCAQFygrvVCZhudVaY=";
+  cargoHash = "sha256-8vG04uekikCedZ+71MQlrxh1fGeCGmzi61HQ0Nmh+7s=";
 
   buildType = "production";
   buildAndTestSubdir = target;
