@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install nix
         uses: cachix/install-nix-action@v31
       - name: Update flake packages
         uses: andresilva/nix-update-action@main
         with:
           token: ${{ secrets.GH_TOKEN }}
-          blacklist: "polkadot,polkadot-omni-node,polkadot-parachain,chain-spec-builder,frame-omni-bencher,subkey,zombienet"
+          blacklist: "polkadot,polkadot-omni-node,polkadot-parachain,chain-spec-builder,frame-omni-bencher,subkey"
           pr-title: "bot: update packages"
