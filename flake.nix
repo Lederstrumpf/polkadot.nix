@@ -37,17 +37,23 @@
           };
         }
       );
+      lib = eachSystem (
+        system: pkgs: {
+          mkDevShell =
+            args:
+            import ./shell.nix (
+              {
+                inherit pkgs;
+                fenixPkgs = fenix.packages.${system};
+              }
+              // args
+            );
+        }
+      );
       devShells = eachSystem (
         system: pkgs: {
-          default = import ./shell.nix {
-            inherit pkgs;
-            fenixPkgs = fenix.packages.${system};
-          };
-          nightly = import ./shell.nix {
-            inherit pkgs;
-            fenixPkgs = fenix.packages.${system};
-            channel = "latest";
-          };
+          default = self.lib.${system}.mkDevShell { };
+          nightly = self.lib.${system}.mkDevShell { channel = "latest"; };
           local = with pkgs; mkShell { packages = [ nix-update ]; };
         }
       );
