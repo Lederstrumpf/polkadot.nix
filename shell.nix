@@ -1,8 +1,10 @@
 {
-  pkgs ? import <nixpkgs> { },
+  pkgs,
   fenixPkgs,
   channel ? "stable",
   linker ? "wild",
+  packages ? [ ],
+  env ? { },
 }:
 
 assert pkgs.lib.assertOneOf "linker" linker [
@@ -46,9 +48,10 @@ let
     };
 in
 with pkgs;
-mkShell.override { stdenv = clangStdenv; } (
-  {
-    packages = [
+mkShell.override { stdenv = clangStdenv; } {
+  packages =
+    packages
+    ++ [
       llvmPackages.lld
       openssl
       pkg-config
@@ -58,6 +61,7 @@ mkShell.override { stdenv = clangStdenv; } (
       rust-jemalloc-sys-unprefixed
     ];
 
+  env = {
     LIBCLANG_PATH = lib.makeLibraryPath [ llvmPackages.libclang ];
     RUST_SRC_PATH = "${rust-toolchain}/lib/rustlib/src/rust/library";
 
@@ -66,4 +70,5 @@ mkShell.override { stdenv = clangStdenv; } (
     ROCKSDB_LIB_DIR = lib.makeLibraryPath [ rocksdb ];
   }
   // cargoLinker
-)
+  // env;
+}
