@@ -7,6 +7,11 @@
   env ? { },
 }:
 
+assert pkgs.lib.assertOneOf "channel" channel [
+  "stable"
+  "beta"
+  "latest"
+];
 assert pkgs.lib.assertOneOf "linker" linker [
   "mold"
   "wild"

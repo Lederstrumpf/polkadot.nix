@@ -111,7 +111,23 @@ You can run it directly with:
 nix develop "github:andresilva/polkadot.nix"
 ```
 
-You can also integrate it into a flake and override it with more packages:
+The `default` shell uses the stable Rust toolchain, a `nightly` shell built from the latest toolchain is also available:
+
+```sh
+nix develop "github:andresilva/polkadot.nix#nightly"
+```
+
+### Customizing the shell
+
+The shell is also exposed as a builder function, `lib.${system}.mkDevShell`, so downstream flakes can pick a toolchain channel and linker,
+and add their own packages and environment variables:
+
+| Argument   | Default    | Description                                                                                       |
+| ---------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| `channel`  | `"stable"` | Rust toolchain channel (`"stable"`, `"beta"`, or `"latest"` for nightly).                         |
+| `linker`   | `"wild"`   | Linker used on Linux (`"wild"`, `"mold"` or `"lld"`), ignored on Darwin, which always uses `lld`. |
+| `packages` | `[ ]`      | Extra packages, prepended so they take precedence on `PATH`.                                      |
+| `env`      | `{ }`      | Extra environment variables, added to the defaults (overriding those with the same name).         |
 
 ```nix
 {
@@ -130,9 +146,11 @@ You can also integrate it into a flake and override it with more packages:
       };
     in
     {
-      devShells.${system}.default = polkadot.devShells.${system}.default.overrideAttrs (attrs: {
-        nativeBuildInputs = with pkgs; attrs.nativeBuildInputs ++ [ zepter ];
-      });
+      devShells.${system}.default = polkadot.lib.${system}.mkDevShell {
+        linker = "mold";
+        packages = with pkgs; [ zepter ];
+        env.RUSTC_WRAPPER = pkgs.lib.getExe pkgs.sccache;
+      };
     };
 }
 ```
