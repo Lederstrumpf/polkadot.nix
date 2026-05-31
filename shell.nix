@@ -2,7 +2,14 @@
   pkgs ? import <nixpkgs> { },
   fenixPkgs,
   channel ? "stable",
+  linker ? "wild",
 }:
+
+assert pkgs.lib.assertOneOf "linker" linker [
+  "mold"
+  "wild"
+  "lld"
+];
 
 let
   channelPkgs = fenixPkgs.${channel};
@@ -21,13 +28,17 @@ let
   cargoLinker =
     with pkgs;
     let
-      mold = wrapBintoolsWith { bintools = pkgs.mold; };
       rustTarget = stdenv.hostPlatform.rust.cargoEnvVarTarget;
+      linkerFlags = {
+        lld = "-Clink-arg=-fuse-ld=${llvmPackages.lld}/bin/ld.lld -Clink-arg=-Wl,--no-rosegment";
+        mold = "-Clink-arg=-fuse-ld=${mold}/bin/ld.mold -Clink-arg=-Wl,--no-rosegment";
+        wild = "-Clink-arg=-fuse-ld=${wild}/bin/ld.wild";
+      };
       rustflags =
         if stdenv.isDarwin then
           "-Clink-arg=-fuse-ld=${llvmPackages.lld}/bin/ld64.lld"
         else
-          "-Clink-arg=-fuse-ld=${mold}/bin/ld.mold -Clink-arg=-Wl,--no-rosegment";
+          linkerFlags.${linker};
     in
     {
       "CARGO_TARGET_${rustTarget}_LINKER" = "clang";
