@@ -17,15 +17,15 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname;
 
-  version = "2603-4";
+  version = "2606";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
     repo = "polkadot-sdk";
-    rev = "force-portable-blake2_simd-${version}";
+    rev = "force-portable-blake2_simd-${finalAttrs.version}";
     hash = "sha256-D4tkHy0rIQN1ePbuU5hyf6CYrLiXGo7nOyDBb1lNL3k=";
 
     # the build process of polkadot requires a .git folder in order to determine
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     ./picosimd-0.9.3.patch
   ];
 
-  cargoHash = "sha256-l4NeDZe0ezVYMq79yJP/IncMf4l9fYNJ6/DXMrvs5Co=";
+  cargoHash = "sha256-iG0buRE+F65F6ZaBE8TT6JmgqPtSb1gLmugh6TxcLIk=";
 
   buildType = "production";
   buildAndTestSubdir = target;
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     rustc.llvmPackages.lld
   ];
 
-  # NOTE: jemalloc is used by default on Linux
+  # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [
     openssl
   ]
@@ -74,9 +74,11 @@ rustPlatform.buildRustPackage rec {
     cacert
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-  PROTOC = "${protobuf}/bin/protoc";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    PROTOC = "${protobuf}/bin/protoc";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
 
   meta = with lib; {
     inherit description license;
@@ -88,4 +90,4 @@ rustPlatform.buildRustPackage rec {
       platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86
     );
   };
-}
+})
