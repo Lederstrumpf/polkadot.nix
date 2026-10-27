@@ -5,6 +5,7 @@
   linker ? "wild",
   packages ? [ ],
   env ? { },
+  shellHook ? "",
 }:
 
 assert pkgs.lib.assertOneOf "channel" channel [
@@ -36,14 +37,15 @@ let
     with pkgs;
     let
       rustTarget = stdenv.hostPlatform.rust.cargoEnvVarTarget;
+      mkLinkerFlags = ld: "-Clink-arg=-fuse-ld=${ld} -Clink-arg=-Wl,--no-rosegment -Clink-arg=-flto";
       linkerFlags = {
-        lld = "-Clink-arg=-fuse-ld=${llvmPackages.lld}/bin/ld.lld -Clink-arg=-Wl,--no-rosegment";
-        mold = "-Clink-arg=-fuse-ld=${mold}/bin/ld.mold -Clink-arg=-Wl,--no-rosegment";
-        wild = "-Clink-arg=-fuse-ld=${wild}/bin/ld.wild";
+        lld = mkLinkerFlags "${llvmPackages_latest.lld}/bin/ld.lld";
+        mold = mkLinkerFlags "${mold}/bin/ld.mold";
+        wild = mkLinkerFlags "${wild}/bin/ld.wild";
       };
       rustflags =
-        if stdenv.isDarwin then
-          "-Clink-arg=-fuse-ld=${llvmPackages.lld}/bin/ld64.lld"
+        if stdenv.hostPlatform.isDarwin then
+          "-Clink-arg=-fuse-ld=${llvmPackages_latest.lld}/bin/ld64.lld"
         else
           linkerFlags.${linker};
     in
@@ -53,11 +55,13 @@ let
     };
 in
 with pkgs;
-mkShell.override { stdenv = clangStdenv; } {
+mkShell.override { stdenv = llvmPackages_latest.stdenv; } {
+  inherit shellHook;
+
   packages =
     packages
     ++ [
-      llvmPackages.lld
+      llvmPackages_latest.lld
       openssl
       pkg-config
       rust-toolchain
@@ -67,7 +71,7 @@ mkShell.override { stdenv = clangStdenv; } {
     ];
 
   env = {
-    LIBCLANG_PATH = lib.makeLibraryPath [ llvmPackages.libclang ];
+    LIBCLANG_PATH = lib.makeLibraryPath [ llvmPackages_latest.libclang ];
     RUST_SRC_PATH = "${rust-toolchain}/lib/rustlib/src/rust/library";
 
     OPENSSL_NO_VENDOR = 1;

@@ -20,7 +20,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname;
 
-  version = "2606-1";
+  version = "2609";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
