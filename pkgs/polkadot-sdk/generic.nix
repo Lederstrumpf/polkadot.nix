@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Lederstrumpf";
     repo = "polkadot-sdk";
     rev = "force-portable-blake2_simd-${finalAttrs.version}";
-    hash = "sha256-ka/ez03bA4CNbvSTGfdEZNz5k9qpmll6sERex97nfvM=";
+    hash = "sha256-6JuwBVCkSOIQwnMfHvONcFFb9g+8hsORg/hvEC5fXOE=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .git_commit
   '';
 
-  cargoHash = "sha256-ZN7rLLBT3yOXfY/xI6jOqUMu5pcWExwQt7w3TgR0wKQ=";
+  cargoHash = "sha256-fqBy1vwWa9AmdXc7my1I3pay47VzPo0dioitz+CimoA=";
 
   buildType = "production";
   buildAndTestSubdir = target;
