@@ -15,12 +15,13 @@
   rustPlatform,
   rustc,
   stdenv,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname;
 
-  version = "2609";
+  version = "2609-1";
 
   src = fetchFromGitHub {
     owner = "Lederstrumpf";
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 
